@@ -1,20 +1,18 @@
-# from django.db import models
-# from django.db.models.signals import post_save
-# from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.contrib.auth import get_user_model
 
 
-# class User(AbstractUser):
-#     username = models.CharField(max_length=100)
-#     email = models.EmailField(unique=True)
+User = get_user_model()
 
+class ChatMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user")
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
 
-
-# class ChatMessage(models.Models):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user")
-#     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="sender")
-#     reciever = models.ForeignKey(User, on_delete=models.CASCADE,related_name="reciever")
-#     message = models.CharField(max_length=2000)
-#     is_read = models.BooleanField(default=False)
-#     date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.user.username
+    
+    def last_10_messages(self):
+        return ChatMessage.objects.order_by('-timestamp').all()[:10]
 
 

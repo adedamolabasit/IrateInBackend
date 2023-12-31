@@ -72,14 +72,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'IrateInBackend.wsgi.application'
 ASGI_APPLICATION = "IrateInBackend.asgi.application"
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://:1CUfRx5pDEZdps5Jg8L0T2Y3mvVczbMR@redis-13822.c281.us-east-1-2.ec2.cloud.redislabs.com:13822/0"],
+      
+        },
+    },
+}
 
 
 # Database
