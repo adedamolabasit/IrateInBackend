@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'daphne',
     'chatapp',
     'django.contrib.admin',
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 
 ]
 
@@ -50,9 +53,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",  # Add the origin of your frontend application
+    "https://grey-resonance-674074.postman.co",
+    # Add the origin of your Postman environment
 ]
 
 ROOT_URLCONF = 'IrateInBackend.urls'
+
+AUTH_USER_MODEL = "chatapp.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        "chatapp.authtoken.jwtAuth"
+    ]
+}
 
 TEMPLATES = [
     {
@@ -70,8 +89,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'IrateInBackend.wsgi.application'
+# WSGI_APPLICATION = 'IrateInBackend.wsgi.application'
 ASGI_APPLICATION = "IrateInBackend.asgi.application"
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
