@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from .serializer import UserSerializer, LoginSerializer, UserGetSerializer,ChatMessageSerializer, FriendsListSerializer
 from .authtoken import jwtAuth
 from rest_framework import status
-from django.contrib.auth import get_user_model
 from .models import ChatMessage, FriendsList, User
 
 
