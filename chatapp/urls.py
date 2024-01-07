@@ -4,7 +4,7 @@ from .views import register_user, login, get_user_list, get_user_details, get_pr
 app_name = "chatapp"
 
 urlpatterns = [
-    path('register/', register_user , name='register'),
+    path('signup/', register_user , name='register'),
     path('login/', login , name='login'),
     path('users/', get_user_list , name='users'),
     path('users/<int:id>/', get_user_details , name='users'),

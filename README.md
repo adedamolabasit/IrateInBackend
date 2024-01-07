@@ -22,8 +22,8 @@ ChatApp Full-Stack Role Hands-On Tasks.
 ### Clone the Repositoy
 
 ```bash
-git clone https://github.com/yourusername/yourproject.git
-cd yourproject
+git clone https://github.com/adedamolabasit/IrateInBackend
+cd IrateInBackend
 ```
 
 ### Create and Activate Virtual Environment
