@@ -57,7 +57,7 @@ MIDDLEWARE = [
 ]
 
 ALLOWED_HOSTS = [
-    "irate-in-backend-e3o3hoewu-adedamolabasit.vercel.app", 
+    ".vercel.app", 
     "localhost",
     "127.0.0.1",
     "grey-resonance-674074.postman.co",
