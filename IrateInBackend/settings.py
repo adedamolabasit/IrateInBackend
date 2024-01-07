@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,13 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nz(i5c3vj4-+d^sx22u6seoh*vvesi#kg@#gk+$v+dd(=4i7(i'
+SECRET_KEY = config('SECRET_KEY')
+PYTHON_ENV = config('PYTHON_ENV', default='DEVELOPMENT')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    config('ALLOWED_HOST_1'),
+    config('ALLOWED_HOST_2'),
+    config('ALLOWED_HOST_3'),
+]
 
 # Application definition
 
@@ -48,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -56,11 +62,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-ALLOWED_HOSTS = [
-    ".vercel.app", 
-    "localhost",
-    "127.0.0.1",
-    "grey-resonance-674074.postman.co",
+CORS_ALLOWED_ORIGINS = [
+    config('ALLOWED_ORIGIN_1'),
+    config('ALLOWED_ORIGIN_2'),
+    config('ALLOWED_ORIGIN_3'),
 ]
 
 ROOT_URLCONF = 'IrateInBackend.urls'
@@ -89,15 +94,14 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'IrateInBackend.wsgi.application'
+
 ASGI_APPLICATION = "IrateInBackend.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": ["redis://:aGPwNLWY61ZVEjtbyFwj7uO9k73V7IJJ@redis-14241.c274.us-east-1-3.ec2.cloud.redislabs.com:14241"],
-      
+            "hosts": [config('REDIS_URL')],
         },
     },
 }
@@ -105,18 +109,26 @@ CHANNEL_LAYERS = {
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'klhjcbpg',
-        'USER': 'klhjcbpg',
-        'PASSWORD': 'Z8DeEWK1bv-S8BqW3p0HQPuBXh4jR_zG',  # Replace with your actual password
-        'HOST': 'castor.db.elephantsql.com',
-        'PORT': '5432',
+if PYTHON_ENV == 'DEVELOPMENT':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / "db.sqlite3",
+        }
     }
-}
-
+elif PYTHON_ENV == 'PRODUCTION':
+    DATABASES = {
+        'default': {
+            'ENGINE': config('django.db.backends.postgresql', default="django.db.backends.postgresql"),
+            'NAME': config('DATABASE_NAME', default=''),
+            'USER': config('DATABASE_USER', default=''),
+            'PASSWORD': config('DATABASE_PASSWORD', default=''),
+            'HOST': config('DATABASE_HOST', default=''),
+            'PORT': config('DATABASE_PORT', default=''),
+        }
+    }
+else:
+    raise ValueError(f"Invalid value for PYTHON_ENv, can either be PRODUCTION or DEVELOPEMENT: {PYTHON_ENV}")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

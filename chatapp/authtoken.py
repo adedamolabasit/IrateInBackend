@@ -46,16 +46,12 @@ class jwtAuth(BaseAuthentication):
     
     @database_sync_to_async
     def authenticate_websocket(self, scope, token):
-        print(token,"gdg")
         
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
             self.verify_token(payload=payload)
-            
-            user_id = payload["id"]
-            
+            user_id = payload["id"]        
             user = User.objects.get(id=user_id)    
-            print(user_id,"ooodg")    
             return user
         
         except (InvalidTokenError, ExpiredSignatureError, User.DoesNotExist):

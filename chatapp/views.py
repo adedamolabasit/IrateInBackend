@@ -20,7 +20,6 @@ def register_user(request):
 
 @api_view(['POST'])
 def login(request):
-    print(request.data)
     serializer = LoginSerializer(data=request.data)
     if serializer.is_valid():
         token = jwtAuth.generate_token(payload=serializer.data)
@@ -83,13 +82,11 @@ def get_previous_messages(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated]) 
 def add_friend(request, email):
-    print(request.data, "lll")
     try:
         friend_user = User.objects.filter(email=email).first()
         if friend_user is not None:
             friends_list, created = FriendsList.objects.get_or_create(user=request.user)
             friends_list.add_friend(friend_user)
-            print(friends_list, "sllp")
 
             serializer = FriendsListSerializer(friends_list)
             return Response(serializer.data, status=200)
