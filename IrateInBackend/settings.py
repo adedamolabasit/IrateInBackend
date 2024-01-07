@@ -57,7 +57,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    ".vercel.app"
+    "irate-in-backend.vercel.app"
     'http://localhost:5173',
     "http://127.0.0.1:8000",
     "http://localhost:3000",  
@@ -109,8 +109,12 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'klhjcbpg',
+        'USER': 'klhjcbpg',
+        'PASSWORD': 'Z8DeEWK1bv-S8BqW3p0HQPuBXh4jR_zG',  # Replace with your actual password
+        'HOST': 'castor.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
