@@ -113,8 +113,8 @@ def add_friend(request, email):
 def get_user_friends(request):
     try:
         friends_list, created = FriendsList.objects.get_or_create(user=request.user)
-        friends = friends_list.friends.all()  # Retrieve all friends from the FriendsList
-        serializer = UserSerializer(friends, many=True)  # Assuming you have a UserSerializer for your User model
+        friends = friends_list.friends.all()  
+        serializer = UserSerializer(friends, many=True) 
         return Response(serializer.data, status=200)
 
     except Exception as e:

@@ -57,11 +57,11 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    ".vercel.app"
     'http://localhost:5173',
     "http://127.0.0.1:8000",
-    "http://localhost:3000",  # Add the origin of your frontend application
+    "http://localhost:3000",  
     "https://grey-resonance-674074.postman.co",
-    # Add the origin of your Postman environment
 ]
 
 ROOT_URLCONF = 'IrateInBackend.urls'
@@ -96,10 +96,10 @@ ASGI_APPLICATION = "IrateInBackend.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #     "hosts": ["redis://:aGPwNLWY61ZVEjtbyFwj7uO9k73V7IJJ@redis-14241.c274.us-east-1-3.ec2.cloud.redislabs.com:14241"],
+        "CONFIG": {
+            "hosts": ["redis://:aGPwNLWY61ZVEjtbyFwj7uO9k73V7IJJ@redis-14241.c274.us-east-1-3.ec2.cloud.redislabs.com:14241"],
       
-        # },
+        },
     },
 }
 
