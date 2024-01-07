@@ -56,13 +56,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "irate-in-backend.vercel.app",
-    "irate-in-backend-7ngnbsvtt-adedamolabasit.vercel.app"
-    'http://localhost:5173',
-    "http://127.0.0.1:8000",
-    "http://localhost:3000",  
-    "https://grey-resonance-674074.postman.co",
+ALLOWED_HOSTS = [
+    "irate-in-backend-e3o3hoewu-adedamolabasit.vercel.app", 
+    "localhost",
+    "127.0.0.1",
+    "grey-resonance-674074.postman.co",
 ]
 
 ROOT_URLCONF = 'IrateInBackend.urls'
