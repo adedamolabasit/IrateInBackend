@@ -57,6 +57,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
     "http://127.0.0.1:8000",
     "http://localhost:3000",  # Add the origin of your frontend application
     "https://grey-resonance-674074.postman.co",
@@ -95,10 +96,10 @@ ASGI_APPLICATION = "IrateInBackend.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": ["redis://:1CUfRx5pDEZdps5Jg8L0T2Y3mvVczbMR@redis-13822.c281.us-east-1-2.ec2.cloud.redislabs.com:13822/0"],
+        # "CONFIG": {
+        #     "hosts": ["redis://:aGPwNLWY61ZVEjtbyFwj7uO9k73V7IJJ@redis-14241.c274.us-east-1-3.ec2.cloud.redislabs.com:14241"],
       
-        },
+        # },
     },
 }
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from django.utils import timezone
 class userManager(BaseUserManager):
     def create_user(self,email,password=None,**extra_fields):
         if not email:
@@ -36,71 +36,44 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.email
-
-
-
-
-
-# class User(AbstractUser):
-#     username = models.CharField(max_length=100)
-#     email = models.EmailField(unique=True)
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['username']
-
-
-#     def profile(self):
-#         Profile.objects.get(user=self)
-
     
-
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     full_name = models.CharField(max_length=1000)
-#     bio = models.CharField(max_length=100)
-#     image = models.ImageField(upload_to="user_images", default="default.jpg")
-#     verified = models.BooleanField(default=False)
-
-#     def save(self, *args, **kwargs):
-#         if self.full_name == "" or self.full_name == None:
-#             self.full_name = self.user.username
-#         super(Profile, self).save(*args, **kwargs)
-
-
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
-
-# post_save.connect(create_user_profile, sender=User)
-# post_save.connect(save_user_profile, sender=User)
-
-
-# class ChatMessage(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user", default=1)
-#     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="sender", default=1)
-#     reciever = models.ForeignKey(User, on_delete=models.CASCADE,related_name="reciever", default=1)
-#     message = models.TextField(default="None")
-#     is_read = models.BooleanField(default=False)
-#     date = models.DateTimeField(auto_now_add=True)
-
-   
-#     class Meta:
-#         ordering = ['date']
-#         verbose_name_plural = "Message"
-        
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='user_profile')
+#     name = models.CharField(max_length=255, blank=True)
+#     online_status = models.BooleanField(default=False)
+    
 #     def __str__(self):
-#         return F"{self.sender} - {self.reciever}"
+#         return self.user.username
+
+
+class ChatMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    initiator = models.IntegerField(default=0)
+    group_name = models.CharField(max_length=256, blank=False, default="group")
     
-#     @property
-#     def sender_profile(self):
-#         sender_profile = Profile.objects.get(user=self.sender)
-#         return sender_profile
-#     @property
-#     def reciever_profile(self):
-#         reciever_profile = Profile.objects.get(user=self.reciever)
-#         return reciever_profile
+    
+class FriendsList(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="users")
+    friends = models.ManyToManyField(User,blank=True,related_name="friends")
 
+    
+    def __str__(self):
+        return self.user.email
+    
+    def add_friend(self, friend_user):
+        if not friend_user in self.friends.all():
+            self.friends.add(friend_user)
+            self.save()
 
+    def remove_friend(self, friend_user):
+        if friend_user in self.friends.all():
+            self.friends.remove(friend_user)
+    
+
+            
+            
+        
+    

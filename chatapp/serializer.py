@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, ChatMessage, FriendsList
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['email','password','first_name','last_name']
+        fields = ['email','password','first_name','last_name','id']
         extra_kwargs = {
             'password':{'write_only':True}
         }
@@ -51,7 +51,7 @@ class LoginSerializer(serializers.Serializer):
         
         return {
             "id":user.id,
-            "email":user.email
+            "email":user.email,
         }
         
 class UserGetSerializer(serializers.ModelSerializer):
@@ -59,91 +59,18 @@ class UserGetSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email','first_name', 'last_name', 'id']
         extra_kwargs = {'id':{'read_only':True}}
-            
-
-
-
-
-
-
-# class UserSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = User
-#         fields = ('id', 'username', 'email')
-
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
         
-#         # These are claims, you can add custom claims
-#         token['full_name'] = user.profile.full_name
-#         token['username'] = user.username
-#         token['email'] = user.email
-#         token['bio'] = user.profile.bio
-#         token['image'] = str(user.profile.image)
-#         token['verified'] = user.profile.verified
-#         # ...
-#         return token
+class ChatMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatMessage
+        fields = '__all__'
+            
+class FriendsListSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='user.id')
+    email = serializers.EmailField(source='user.email')
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
 
-
-# class RegisterSerializer(serializers.ModelSerializer):
-#     password = serializers.CharField(
-#         write_only=True, required=True, validators=[validate_password])
-#     password2 = serializers.CharField(write_only=True, required=True)
-
-#     class Meta:
-#         model = User
-#         fields = ('email', 'username', 'password', 'password2')
-
-#     def validate(self, attrs):
-#         if attrs['password'] != attrs['password2']:
-#             raise serializers.ValidationError(
-#                 {"password": "Password fields didn't match."})
-
-#         return attrs
-
-#     def create(self, validated_data):
-#         user = User.objects.create(
-#             username=validated_data['username'],
-#             email=validated_data['email']
-
-#         )
-
-#         user.set_password(validated_data['password'])
-#         user.save()
-
-#         return user
-    
-# class ProfileSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Profile
-#         fields = [ 'id',  'user',  'full_name', 'image' ]
-    
-#     def __init__(self, *args, **kwargs):
-#         super(ProfileSerializer, self).__init__(*args, **kwargs)
-#         request = self.context.get('request')
-#         if request and request.method=='POST':
-#             self.Meta.depth = 0
-#         else:
-#             self.Meta.depth = 3
-
-
-
-# class MessageSerializer(serializers.ModelSerializer):
-#     reciever_profile = ProfileSerializer(read_only=True)
-#     sender_profile = ProfileSerializer(read_only=True)
-
-#     class Meta:
-#         model = ChatMessage
-#         fields = ['id','sender', 'reciever', 'reciever_profile', 'sender_profile' ,'message', 'is_read', 'date']
-    
-#     def __init__(self, *args, **kwargs):
-#         super(MessageSerializer, self).__init__(*args, **kwargs)
-#         request = self.context.get('request')
-#         if request and request.method=='POST':
-#             self.Meta.depth = 0
-#         else:
-#             self.Meta.depth = 2
+    class Meta:
+        model = FriendsList
+        fields = ['id', 'friends', 'email', 'first_name', 'last_name']

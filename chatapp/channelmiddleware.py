@@ -30,7 +30,7 @@ class Jwtwebsocketmiddleware(BaseMiddleware):
                     "type": "websocket.close",
                     "code": 4000
                 })
-                return  # Make sure to return after sending close message
+                return 
             return await super().__call__(scope, receive, send)
 
         except AuthenticationFailed:
