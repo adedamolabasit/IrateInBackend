@@ -119,7 +119,7 @@ if PYTHON_ENV == 'DEVELOPMENT':
 elif PYTHON_ENV == 'PRODUCTION':
     DATABASES = {
         'default': {
-            'ENGINE': config('django.db.backends.postgresql', default="django.db.backends.postgresql"),
+            'ENGINE': config('DATABASE_ENGINE', default="django.db.backends.postgresql"),
             'NAME': config('DATABASE_NAME', default=''),
             'USER': config('DATABASE_USER', default=''),
             'PASSWORD': config('DATABASE_PASSWORD', default=''),
